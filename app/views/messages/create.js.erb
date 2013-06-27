@@ -1,0 +1,14 @@
+<%= publish_to "/messages/new" + @message.user_id.to_s do %>
+$("#conversations").append("<%= j render(@message) %>");
+$("#message_content").val('');
+<% end %>
+
+<%= publish_to "/messages/new" + @message.target_id.to_s do %>
+$("#conversations").append("<%= j render(@message) %>");
+var unread_count = parseInt($("#unread_count_<%= @message.user_id.to_s %>").val()) + 1;
+$("#unread_count_<%= @message.user_id.to_s %>").val(unread_count);
+$("#notifications_count_<%= @message.user_id.to_s %>").text(unread_count);
+<% end %>
+
+
+

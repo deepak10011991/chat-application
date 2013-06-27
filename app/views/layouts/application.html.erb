@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chatapp</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div class="header">
+    <div class="header_navigation">
+      <div class="header_navigation_links pull-right">
+        <% if current_user %>
+          Welcome! <%= link_to current_user_name, edit_user_registration_path %>,
+          <%= link_to 'Sign out', destroy_user_session_path, :method => :delete %>
+        <% else %>
+          <%= link_to 'Sign in', new_user_session_path %> |
+          <%= link_to 'Sign up', "/users/sign_up" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="content container">
+    <% flash.each do |name, msg| %>
+      <%= content_tag :div, :class => "alert #{name == :error ? "alert-error" : "alert-success" }" do %>
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <%= msg %>
+      <% end %>
+    <% end %>
+      <%= yield %>
+  </div>
+  <div class="footer">
+    <div class="footer_links">
+    </div>
+  </div>
+
+</body>
+</html>

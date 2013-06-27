@@ -1,0 +1,48 @@
+<%= subscribe_to "/messages/new" + current_user.id.to_s  %>
+<h1>Chat</h1>
+<hr>
+
+<div class="row">
+  <div class="span3">
+    <ul class="unstyled users_list" style="border-right: 1px solid lightgray ">
+      <% @users.each do|user| %>
+        <li>
+          <%= link_to user.email,'#', :class => 'list_user',"data-target_id" => user.id %>
+          <%= hidden_field_tag :unread_count, 0, :id => "unread_count_#{user.id}" %>
+          <span id="notifications_count_<%= user.id  %>"></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="span8">
+    <ul id="conversations" class="unstyled">
+      <%= render @messages %>
+    </ul>
+    <hr>
+    <%= form_for Message.new, :remote => true do |f| %>
+      <%= f.hidden_field :target_id %>
+      <%= f.text_field :content %>
+      <%= f.submit "Send" %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $('.list_user').on('click',function(){
+    var target_id = $(this).data('target_id');
+    $("span#notifications_count_" + target_id).text('');
+    $("#unread_count_" + target_id).val(0);
+    $('.users_list a').removeClass('active');
+    $(this).addClass('active');
+    $('#message_target_id').val(target_id);
+  });
+</script>
+
+<style>
+  .list_user:hover{
+    cursor: pointer;
+  }
+  .list_user.active{
+    color: green;
+  }
+</style>
